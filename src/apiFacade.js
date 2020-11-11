@@ -15,11 +15,8 @@ const login = (user, password) => {
       .then(handleHttpErrors)
       .then(res => {setToken(res.token) })
  }
-const fetchData = () => {const options = makeOptions("GET",true); //True add's the token
-return fetch(URL + "/api/info/user", options).then(handleHttpErrors);  }
-
-const fetchDataAdmin = () => {const options = makeOptions("GET",true); //True add's the token
-return fetch(URL + "/api/info/admin", options).then(handleHttpErrors);  }
+const fetchData = (role) => {const options = makeOptions("GET",true); //True add's the token
+return fetch(URL + "/api/info/" + role, options).then(handleHttpErrors);  }
 
 const makeOptions= (method,addToken,body) =>{
    var opts = {
@@ -58,8 +55,8 @@ const logout = () => {
      loggedIn,
      login,
      logout,
-     fetchData,
-     fetchDataAdmin
+     fetchData
+
  }
 
  

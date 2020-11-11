@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from "react"
-import facade from "./apiFacade";
+import facade from "./apiFacade"; 
 import {
   Switch,
   Route,
@@ -8,7 +8,6 @@ import {
   useRouteMatch,
   Prompt
 } from "react-router-dom";
-
 
 
 
@@ -22,12 +21,24 @@ function Header(){
             <li>
             <NavLink  activeClassName="selected" to="/LoginPage">Login</NavLink>
             </li>
+            <li>
+            <NavLink  activeClassName="selected" to="/StarwarsPage">Star Wars</NavLink>
+            </li>
             
     </ul>
    </div>
   )  
   }
   
+  function StarWarsPage(){
+    return (
+      <div>
+        <h1>This is the Star Wars Page</h1>
+      </div>
+    )
+  } 
+
+
   function Home(){
     return (
       <div>
@@ -38,8 +49,8 @@ function Header(){
 
 
 
-  function LoginPage(){
-    const [loggedIn, setLoggedIn] = useState(false)   
+  function LoginPage({setLoggedIn,loggedIn}){
+     
     const [loggedInError, setLoggedInError] = useState("")
  
     const logout = () => { facade.logout()
@@ -95,37 +106,30 @@ function LogIn({ login }) {
 }
 function LoggedIn() {
   const [dataFromServer, setDataFromServer] = useState("")
-  const [errorFromServer, setErrorFromServer] = useState("")
-  
-  useEffect(() => { facade.fetchData().then(data=> setDataFromServer(data.msg)) 
-    .catch(err  => err.fullError ).then(facade.fetchDataAdmin().then(data=> setErrorFromServer(data.msg))) 
+  const jwt = require("jsonwebtoken")
+  const token = localStorage.getItem("jwtToken");
+  const role = jwt.decode(token).roles;
+  useEffect(() => { facade.fetchData(role).then(data=> setDataFromServer(data.msg)) 
     ;       }, [])
   
-
-
-if(errorFromServer !== ""){
-  console.log(errorFromServer)
-  return(
-    <div>
-  <h3>{errorFromServer}</h3>
-  <h3>Role:Admin</h3>
-  </div>
-  
-  )
-}
 
 
   return (
     <div>
       <h2>Data Received from server</h2>
       <h3>{dataFromServer}</h3>
-      <h3>Role: User</h3>
+  <h3>Role: {role}</h3>
     </div>
   )
  
 }
- 
+
 function App() { 
+ 
+  const [loggedIn, setLoggedIn] = useState(false) 
+ 
+ 
+ 
   return (
   
     <div>
@@ -135,7 +139,10 @@ function App() {
       <Home />
     </Route>
     <Route exact path="/LoginPage">
-      <LoginPage />
+      <LoginPage setLoggedIn={setLoggedIn} loggedIn={loggedIn} />
+    </Route>
+    <Route exact path="/StarWarsPage">
+      <StarWarsPage />
     </Route>
     </Switch> 
     </div>
