@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import facade from "./apiFacade";
 import StarWars from "./starWars";
+import WelcomePage from "./welcomePage";
 import { Switch, Route, NavLink } from "react-router-dom";
 
 function Header({loggedIn}) {
@@ -66,10 +67,8 @@ function StarWarsPage() {
 
 function Home() {
   return (
-    <div>
-      <h1>This is the Welcome Page</h1>
-    </div>
-  );
+    <WelcomePage/>
+    );
 }
 
 function LoginPage({ setLoggedIn, loggedIn }) {

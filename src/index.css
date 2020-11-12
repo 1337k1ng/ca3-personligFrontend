@@ -36,5 +36,5 @@ ul.header li a:hover:not(.active) {
 }
 
 .selected {
-  background-color: #4caf50;
+  background-color: black;
 }
