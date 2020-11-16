@@ -28,6 +28,8 @@ function GetCharacters({ fetchedData }) {
       </table>
     </div>
   );
+
+  //fetchCharecters() tager et array af <charecterDTO>
   function fetchCharacters() {
     let returned = fetchedData.characterInfo.map((data) => {
       return (
@@ -63,6 +65,8 @@ function GetPlanets({ fetchedData }) {
       </table>
     </div>
   );
+
+  //getplanets() tager et array af <PlanetDTO> 
   function getPlanets() {
     let returned = fetchedData.planetInfo.map((data) => {
       return (

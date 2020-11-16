@@ -29,6 +29,12 @@ function apiFacade() {
     return fetch(URL + "/api/info/filmsparallel",options).then(handleHttpErrors);
   };
 
+  const fetchChuckNorrisData = () => {
+    const options = makeOptions("GET", true); //True add's the token
+    return fetch(URL + "/api/info/chuckjoke",options).then(handleHttpErrors);
+  };
+  
+
   const makeOptions = (method, addToken, body) => {
     var opts = {
       method: method,
@@ -68,6 +74,7 @@ function apiFacade() {
     logout,
     fetchData,
     fetchStarWarsData,
+    fetchChuckNorrisData,
   };
 }
 const facade = apiFacade();

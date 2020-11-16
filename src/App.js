@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import facade from "./apiFacade";
 import StarWars from "./starWars";
 import WelcomePage from "./welcomePage";
+import ChuckNorris from "./ChuckNorris";
 import { Switch, Route, NavLink } from "react-router-dom";
 
-function Header({loggedIn}) {
+function Header({ loggedIn }) {
   return (
     <div>
       <ul className="header">
@@ -20,20 +21,22 @@ function Header({loggedIn}) {
         </li>
         {loggedIn && (
           <li>
-          <NavLink activeClassName="selected" to="/StarwarsPage">
-            Star Wars
-          </NavLink>
-        </li>
+            <NavLink activeClassName="selected" to="/StarwarsPage">
+              Star Wars
+            </NavLink>
+          </li>
         )}
-  
+        {loggedIn && (
+          <li>
+            <NavLink activeClassName="selected" to="/ChuckNorrisPage">
+              Chuck Norris
+            </NavLink>
+          </li>
+        )}
       </ul>
     </div>
   );
 }
-
-
-
-
 
 function StarWarsPage() {
   const emptyData = {
@@ -44,11 +47,15 @@ function StarWarsPage() {
   const [fetchedDataError, setfetchedDataError] = useState("");
 
   useEffect(() => {
-    facade.fetchStarWarsData().then((data) => setfetchedData(data)).catch(err => err.fullError).then(err => setfetchedDataError(err));
+    facade
+      .fetchStarWarsData()
+      .then((data) => setfetchedData(data))
+      .catch((err) => err.fullError)
+      .then((err) => setfetchedDataError(err));
   }, []);
 
-  if(fetchedDataError){
-  return <h3>{fetchedDataError.message}</h3>
+  if (fetchedDataError) {
+    return <h3>{fetchedDataError.message}</h3>;
   }
   return <StarWars fetchedData={fetchedData} />;
 }
@@ -59,16 +66,33 @@ function StarWarsPage() {
 
 
 
+function ChuckNorrisPage() {
+  const emptyData = {
+    ChuckJoke: [{ name: "Loading..." }],
+ 
+  };
+  const [fetchedData, setfetchedData] = useState(emptyData);
+  const [fetchedDataError, setfetchedDataError] = useState("");
 
+  useEffect(() => {
+    facade
+      .fetchChuckNorrisData()
+      .then((data) => setfetchedData(data))
+      .catch((err) => err.fullError)
+      .then((err) => setfetchedDataError(err));
+  }, []);
 
+  if (fetchedDataError) {
+    return <h1>{fetchedDataError.message}</h1>;
+  }
+  return <ChuckNorris fetchedData={fetchedData} />;
+}
 
 
 
 
 function Home() {
-  return (
-    <WelcomePage/>
-    );
+  return <WelcomePage />;
 }
 
 function LoginPage({ setLoggedIn, loggedIn }) {
@@ -171,8 +195,12 @@ function App() {
         <Route exact path="/LoginPage">
           <LoginPage setLoggedIn={setLoggedIn} loggedIn={loggedIn} />
         </Route>
+
         <Route exact path="/StarWarsPage">
           <StarWarsPage />
+        </Route>
+        <Route exact path="/ChuckNorrisPage">
+          <ChuckNorrisPage />
         </Route>
       </Switch>
     </div>
