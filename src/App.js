@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import facade from "./apiFacade";
 import StarWars from "./starWars";
 import WelcomePage from "./welcomePage";
-import ChuckNorris from "./ChuckNorris";
+import 'bootstrap/dist/css/bootstrap.min.css'; 
+import Table from 'react-bootstrap/Table';
+
 import { Switch, Route, NavLink } from "react-router-dom";
 
 function Header({ loggedIn }) {
@@ -26,13 +28,14 @@ function Header({ loggedIn }) {
             </NavLink>
           </li>
         )}
-        {loggedIn && (
-          <li>
-            <NavLink activeClassName="selected" to="/ChuckNorrisPage">
-              Chuck Norris
+      <li>
+          <NavLink activeClassName="selected" to="/userPage">
+            User Page
             </NavLink>
-          </li>
-        )}
+      </li>
+
+
+
       </ul>
     </div>
   );
@@ -61,32 +64,6 @@ function StarWarsPage() {
 }
 
 
-
-
-
-
-
-function ChuckNorrisPage() {
-  const emptyData = {
-    ChuckJoke: [{ name: "Loading..." }],
- 
-  };
-  const [fetchedData, setfetchedData] = useState(emptyData);
-  const [fetchedDataError, setfetchedDataError] = useState("");
-
-  useEffect(() => {
-    facade
-      .fetchChuckNorrisData()
-      .then((data) => setfetchedData(data))
-      .catch((err) => err.fullError)
-      .then((err) => setfetchedDataError(err));
-  }, []);
-
-  if (fetchedDataError) {
-    return <h1>{fetchedDataError.message}</h1>;
-  }
-  return <ChuckNorris fetchedData={fetchedData} />;
-}
 
 
 
@@ -132,6 +109,59 @@ function LoginPage({ setLoggedIn, loggedIn }) {
     </div>
   );
 }
+
+
+function UserPage() {
+ // Const er en form for hook. Den laver en variabel som kan arbejde med resultatet efter rendering. 
+  const [fetchData, setFetchData] = useState([]);
+ 
+
+  useEffect(() => {
+    facade.fetchUserPageData().then((data) => setFetchData(data)); 
+    //Tomt array betyder at den kun renderes én gang, og kun en gang. 
+  }, []);
+
+  return (
+    <Table striped bordered hover>
+<thead>
+  <tr>
+    <th>Firstname</th>
+    <th>Name</th>
+    <th>Age</th>
+    <th>Weight</th>
+  </tr>
+  </thead>
+<tbody>
+{MapUsers(fetchData)}
+</tbody>
+</Table>
+
+  )
+
+
+function MapUsers(fetchData){
+return fetchData.map((data) => {
+
+
+  return(
+  <tr>
+   <td>{data.userName}</td>
+   <td>{data.userInfo.name}</td> 
+   <td>{data.userInfo.age}</td> 
+   <td>{data.userInfo.weight}</td> 
+  </tr>
+ )
+})
+
+
+
+}
+
+
+
+
+}
+
 
 function LogIn({ login }) {
   const init = { username: "", password: "" };
@@ -199,9 +229,11 @@ function App() {
         <Route exact path="/StarWarsPage">
           <StarWarsPage />
         </Route>
-        <Route exact path="/ChuckNorrisPage">
-          <ChuckNorrisPage />
+        <Route exact path="/userPage">
+          <UserPage/>
         </Route>
+
+    
       </Switch>
     </div>
   );

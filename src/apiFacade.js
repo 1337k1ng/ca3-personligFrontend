@@ -33,6 +33,12 @@ function apiFacade() {
     const options = makeOptions("GET", true); //True add's the token
     return fetch(URL + "/api/info/chuckjoke",options).then(handleHttpErrors);
   };
+
+  const fetchUserPageData = () => {
+    const options = makeOptions("GET", false); //True add's the token
+    return fetch(URL + "/api/User/getall",options).then(handleHttpErrors);
+  };
+  
   
 
   const makeOptions = (method, addToken, body) => {
@@ -75,6 +81,7 @@ function apiFacade() {
     fetchData,
     fetchStarWarsData,
     fetchChuckNorrisData,
+    fetchUserPageData
   };
 }
 const facade = apiFacade();
